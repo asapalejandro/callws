@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: bar-file-pvc
-  namespace: ace_app_example
+  namespace: ace-app-example
 spec:
   accessModes:
     - ReadWriteOnce
