@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: ace-integration-pipeline
+spec:
+  tasks:
+  - name: fetch-source
+    taskRef:
+      name: git-clone
+    params:
+    - name: url
+      value: "https://github.com/asapalejandro/callws.git"
+    - name: revision
+      value: "main"  # use the main branch
+    - name: subdirectory
+      value: "."
+  # Your other tasks (build-bar, create-ace-config, deploy-ace) follow here...

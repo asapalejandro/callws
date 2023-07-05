@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ace-app-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ace-app
+  template:
+    metadata:
+      labels:
+        app: ace-app
+    spec:
+      containers:
+      - name: ace-app-container
+        image: apalumbo925/acetektonpipeline_example:latest
+        env:
+        - name: LICENSE
+          value: "accept"
+

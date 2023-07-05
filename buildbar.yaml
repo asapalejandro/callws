@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-bar
+spec:
+  resources:
+    inputs:
+    - name: workspace
+      type: git
+  steps:
+  - name: build-bar
+    image: apalumbo925/acetektonpipeline_example:latest # use the image that includes the ACE toolkit and mqsibar command
+    command:
+      - bash
+      - -c
+      - |
+        mqsiprofile
+        mqsibar -w /workspace -a /workspace/output/callws.bar -k /root/ace_tekton_app_example/callws
