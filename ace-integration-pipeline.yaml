@@ -1,0 +1,54 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: ace-integration-pipeline
+spec:
+  params:
+    - name: url
+      type: string
+    - name: revision
+      type: string
+    - name: subdirectory
+      type: string
+    - name: manifest
+      type: string
+  workspaces:
+    - name: shared-workspace
+  tasks:
+    - name: fetch-source
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: "$(params.url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: subdirectory
+          value: "$(params.subdirectory)"
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+    - name: build-bar
+      taskRef:
+        name: build-bar
+      runAfter:
+        - fetch-source
+      workspaces:
+        - name: workspace
+          workspace: shared-workspace
+    - name: create-ace-config
+      taskRef:
+        name: create-ace-config
+      runAfter:
+        - build-bar
+      workspaces:
+        - name: workspace
+          workspace: shared-workspace
+    - name: apply-deployment
+      taskRef:
+        name: apply-deployment
+      params:
+        - name: manifest
+          value: "$(params.manifest)"
+      runAfter:
+        - create-ace-config

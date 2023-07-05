@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: apply-deployment
+spec:
+  params:
+    - name: manifest
+      type: string
+      description: The Kubernetes manifest to apply
+  steps:
+    - name: apply
+      image: bitnami/kubectl:latest
+      command: ["kubectl", "apply", "-f", "$(params.manifest)"]

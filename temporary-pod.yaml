@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: temporary-pod
-  namespace: ace-app-example
+  namespace: ace_app_example
 spec:
   volumes:
     - name: bar-volume

@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: ace-integration-pipeline-run-
+spec:
+  pipelineRef:
+    name: ace-integration-pipeline
+  serviceAccountName: pipeline
+  params:
+  - name: url
+    value: "https://github.com/asapalejandro/callws.git"
+  - name: revision
+    value: "master"
+  - name: subdirectory
+    value: "."
+  - name: manifest
+    value: "./ace-app-deployment.yaml"
+  workspaces:
+  - name: shared-workspace
+    persistentVolumeClaim:
+      claimName: bar-file-pvc
+
