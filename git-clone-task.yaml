@@ -1,0 +1,37 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: git-clone
+spec:
+  workspaces:
+  - name: output
+    description: The git repo will be cloned onto the volume backing this workspace
+  params:
+  - name: url
+    description: git url to clone
+    type: string
+  - name: revision
+    description: git revision to checkout (branch, tag, sha, ref…)
+    type: string
+    default: ""
+  - name: subdirectory
+    description: subdirectory inside the "output" workspace to clone the git repo into
+    type: string
+    default: ""
+  steps:
+  - name: clone
+    image: alpine/git
+    script: |
+      #!/usr/bin/env sh
+      set -e
+      if [ "$(params.subdirectory)" != "" ]; then
+        mkdir -p "$(workspaces.output.path)/$(params.subdirectory)"
+        cd "$(workspaces.output.path)/$(params.subdirectory)"
+      else
+        cd "$(workspaces.output.path)"
+      fi
+      if [ "$(params.revision)" != "" ]; then
+        git clone --depth 1 --branch $(params.revision) $(params.url) .
+      else
+        git clone --depth 1 $(params.url) .
+      fi
